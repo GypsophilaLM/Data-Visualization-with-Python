@@ -1,0 +1,305 @@
+Matplotlib Backends
+import matplotlib.pyplot as plt
+plt.plot(5, 5, 'o')
+plt.show()
+plt.ylabel("Y")
+plt.xlabel("X")
+plt.title("Plotting Example")
+
+Pandas -- line plot
+india_china_df.plot(kind="line")
+
+Pandas -- histogram
+india_china_df["India"].plot(kind="hist")
+
+Read data into Pandas DataFrame
+import numpy as np
+import pandas as pd
+from _future_ import print_function #add compatibility to python 2
+
+#install openpyxl
+!pip install openpyxl
+
+df_can = pd.read_excel(
+    'url',
+    sheetname="Canada by Citizenship",
+    skiprows=range(20),
+    skip_footer = 2)
+    
+#display datafrmae
+df_can.head()
+
+Line Plot
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+years = list(map(str, range(1980, 2014)))
+
+df_canada.loc['Haiti', years].plot(kind = 'line')
+plt.title('Immigration from Haiti')
+plt.ylabel('Number of immigrants')
+plt.xlabel('Years')
+
+plt.show()
+
+Area Plot
+years = list(map(str, range(1980, 2014)))
+
+#sort our dataframe in descending order
+df_canada.sort_values(['Total'], ascending = False, axis = 0, inplace = True)
+
+df_top5 = df_canada.head()
+df_top5 = df_top5[years].transpose()
+
+df_top5.plot(kind='area') #其他部分同于line plot
+
+Histogram
+import numpy as np #需要比常规画图方式多import一项
+count, bin_edges = np.histogram(df_canada['2013'])
+df_canada['2013'].plot(kind='hist') #其他部分同于line plot
+
+Barchart
+years = list(map(str, range(1980, 2014)))
+df_iceland = df_canada.loc['Iceland', years]
+df_iceland.plot(kind='bar') #其他部分同于line plot
+
+Horizontal bar chart
+df_iceland.plot(kind='barh', color='red')
+
+Highlighted bar and edge color
+c = ['blue','red','blue','blue','blue','blue','blue','blue','blue','blue','red']
+df_iceland.plot(kind='barh', color='c', edgecolor='black')
+
+Pie chart
+#group the data by continent using the continent column
+df_continents = df_canada.groupby('Continent', axis = 0).sum()
+
+df_continents['Total'].plot(kind='pie')
+
+plt.title('Immigration to Canada by Continent[1980-2013]')
+
+plt.show()
+
+Box plot
+#create a new dataframe
+df_japan = df_canada.loc[['Japan'], years].transpose()
+df_japan.plot(kind='box')
+
+plt.title('Box plot of Janpanese Immigrants from 1980-2013')
+plt.ylabel("Number of Immigrants")
+
+plt.show()
+
+Scatter plot
+df_total.plot(
+    kind='scatter',
+    x='year',
+    y='total',
+)
+
+plt.title('Total Immigrant population to Canada from 1980-2013')
+plt.xlabel("Year")
+plt.ylabel("Number of Immigrants")
+
+plt.show()
+
+line plot and scatter plot
+#generate a 1D array of numbers 1980-2013 excluding 2014 immigrants equals np.random.randint will generate a 1D array of random integers between 2,000-10,000 range; Size equals 34, specifies the number of elements in the array
+years = np.arange(1980, 2014)
+immigrants = np.random.randint(2000, 10000, size = (34,))
+
+#create figue and axes
+fig, ax = plt.subplots()
+
+#plot the line
+ax.plot(years, immigrants)
+
+plt.show()
+
+#set the limits on x-axis, the x-axis now starts with 1975 and ends up with 2015
+plt.xlim(1975, 2015)
+
+#enabling Grid
+plt.grid(True)
+
+Customizing the appearance of plot
+ax.plot(years, immigrants,
+        marker='s',
+        markersize=5,
+        color='green',
+        linestyle="dotted")
+        
+#plot the bar
+ax.bar(years, immigrants)
+
+#histogram on immigrants
+ax.hist(immigrants, bins=20, edgecolor='black', color='steelblue')
+
+#pie on immigrants
+ax.pie(immigrants[0:5], labels=years[0:5],
+       colors = ['gold','blue','lightgreen','coral','cyan'],
+       autopct = '%1.1f%%')
+       
+Multiple plots and sub-plotting
+#create a figure with 2 axes in a row
+fig, axs = plt.subplots(1, 2, sharey=True)
+
+#create 2 plots together
+#plotting in first axes - the left one
+axs[0].plot(years, immigrants)
+axs[0].set_title("Line plot on immigrants")
+
+##plotting in second axes - the right one
+axs[1].scatter(years, immigrants)
+axs[1].set_title("Scatter plot on immigrants")
+
+#add the first subplot (top-left)
+axs1 = fig.add_subplot(2, 2, 1)
+#plotting in first axes - the left one
+axs1.plot(total_immigrants)
+axs1.set_title("Plot1 - Line plot")
+#you can add more plots by substituting (2, 2, 1) into (2, 2, 2)
+
+Waffle charts & Word cloud
+import pywaffle import Waffle
+
+#create data for the waffle chart
+data = df_dsn[['Africa', 'Asia', 'Europe', 'Oceania']]
+
+#set up the waffle chart figure
+fig = plt.figure(
+    FigureClass=Waffle
+    rows=20,
+    columns=20,
+    values=data,
+    legend={'labels':['Africa', 'Asia', 'Europe', 'Oceania'],
+            'loc':'upper left', 'bbox_to_anchor':(1, 1)})
+
+#display the chart
+plt.show()
+
+Regression Plots
+import seaborn as sns
+ax = sns.regplot(x='year', y='total', data=df_tot,
+                 color='green', marker='+')
+
+Creating a world map
+import folium
+
+#define the world map centered around
+world_map = folium.Map(
+    location=[56.130, -106.35], #pass in Canada's latitude and longitude values
+    zoom_start=4,
+    tiles='Stamen Toner'/ tiles='Stamen Terrain'
+)
+
+#display world map
+world_map
+
+#add a marker for Ontario province
+folium.Marker(location=[51.2538, -85.3232], popup='Ontario').add_to(canada_map)
+
+add marker with feature group
+#generate map of Canada
+canada_map = folium.Map(
+    location=[56.130, -106.35],
+    zoom_start=4
+)
+
+#create a feature group
+ontario = folium.map.FeatureGroup()
+
+#style the feature group
+ontario.add_child(
+    folium.features.CircleMarker(
+    [51.25, -85.32], radius = 5,
+    color = "red", fill_color = "Red"
+    )
+)
+
+#add the feature group to the map
+canada_map.add_child(ontario)
+
+Choropleth maps
+#create a plain world map
+world_map = folium.Map(
+    zoom_start=2,
+    tiles='Mapbox Bright'
+)
+
+#geojson file
+world_geo = r'world_countries.json
+
+#generate choropleth map using the total
+#population of each country to Canada from 1980 to 2013
+world_map.choropleth(
+    geo.path=world_geo,
+    data=df_canada,
+    columns=['Country', 'Total'],
+    key_on='feature.properties.name',
+    fill_color='YlOrRd',
+    legend_name='Immigration to Canada'
+)
+
+Using plotly.graph_objects
+#import required packages
+import plotly.graph_objects as go
+import plotly.express as px
+import numpy as np
+
+#set random seed for reproducibility
+np.random.seed(10)
+x = np.arange(12)
+#create random y values
+y = np.random.randint(50,500,size=12)
+
+Using plotly.graph_objects
+fig = go.Figure(data=go.Scatter(x=x,y=y))
+fig.update_layour(title='Simple Line Plot', xaxis_title='Month', yaxis_title='Sales')
+fig.show()
+
+Using plotly.express
+#entire line chart can be created in a single command
+fig = px.line(x=x, y=y, title='Simple Line Plot', labels=dict(x='Month', y='Sales'))
+fig.show()
+
+Dash
+Open-source User Interface Python library from Plotly
+#import core components
+import dash_core_components as dcc
+#import HTML components
+import dash_html_components as html
+
+How to connect core and html components using callbacks
+whenever there's a change in the input component value, the callback function wrapped by
+the decorator is called followed by the update to the output component children in the 
+application layout
+#import required packages
+import pandas as pd
+import plotly.express as px
+import dash
+import dash_html_components as html
+import dash_core_components as dcc
+from dash.dependencies import Input, Output
+
+#read the data
+airline_data = pd.read_csv('airline_2m.csv',
+                          encoding = "IS0-8859-1",
+                          dtype={'Div1Airport': str,
+                          'Div1TailNum': str
+                          'Div1Airport': str
+                          'Div1TailNum': str})
+
+callback with one input
+app = dash.Dash()
+#design dash app layout
+app.layout = html.Div(children=[ html.H1('Airline Dashboard',
+                                style={'textAlign': 'center', 'color': colors['text'],
+                                'font-size': 40}),
+                                html.Div(["Input: ", dcc.Input(id='input-yr', value='2010',
+                                type='number', style={'height':'50px', 'font-size': 35}),],
+                                style={'font-size': 40}),
+                                html.Br(),
+                                html.Br(),
+                                html.Div(dcc.Graph(id='bar-plot')),
+                                })
